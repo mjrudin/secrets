@@ -3,7 +3,6 @@ class FriendshipsController < ApplicationController
   def create
     @friendship = Friendship.new(follower_id: current_user.id,
                                    friend_id: params[:user_id])
-
     @friendship.save
 
     render json: @friendship

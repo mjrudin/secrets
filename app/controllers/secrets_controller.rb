@@ -11,7 +11,7 @@ class SecretsController < ApplicationController
     @secret.recipient_id = params[:user_id]
     @secret.save
     respond_to do |format|
-      format.json { render :json => @secret }
+      format.json { render :json => {secret: @secret, tags: @secret.tags} }
       format.html { redirect_to user_url(params[:user_id]) }
     end
   end
