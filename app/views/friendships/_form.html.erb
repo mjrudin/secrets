@@ -1,0 +1,57 @@
+<%# friend is passed in from index.html.erb %>
+<span class="friend_buttons <%= current_user.friends.include?(friend) ? "" : "unfriended" %>"
+         id="<%= friend.id %>">
+
+    <%= form_for friend, url: friendships_url, method: :delete do |f| %>
+        <%= f.hidden_field :friend_id, value: "#{friend.id}" %>
+        <%= f.submit "Unfriend", class: "unfriend",
+                                    id: "unfriend_#{friend.id}" %>
+    <% end %>
+
+    <%= button_to "Friend", user_friendships_url(friend),
+                             class: "friend",
+                                id: "friend_#{friend.id}"%>
+
+</span>
+
+
+
+<script>
+  $('#friend_<%= friend.id %>').on('click', function(event) {
+    event.preventDefault();
+
+    var friendButton = $(this);
+    friendButton.attr({value: "Friending...", disabled: ""})
+
+    var formData = $(this.form).serialize();
+    $.ajax({
+      url: "<%= user_friendships_url(current_user) %>",
+      type: 'POST',
+      data: formData,
+      success: function() {
+        friendButton.attr({value: "Friend", disabled: null})
+        $('span.friend_buttons#<%= friend.id %>').toggleClass("unfriended");
+      }
+    });
+  })
+
+
+  $('#unfriend_<%= friend.id %>').on('click', function(event) {
+    event.preventDefault();
+
+    var unfriendButton = $(this);
+    unfriendButton.attr({value: "Unfriending...", disabled: ""})
+
+    var formData = $(this.form).serialize();
+    $.ajax({
+      url: "<%= friendships_url %>",
+      type: 'POST',
+      data: formData,
+      success: function() {
+        unfriendButton.attr({value: "Unfriend", disabled: null})
+        $('span.friend_buttons#<%= friend.id %>').toggleClass("unfriended");
+      }
+    })
+
+  });
+</script>
