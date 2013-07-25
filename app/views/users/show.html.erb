@@ -2,6 +2,8 @@
 <%= render partial: "secrets/new" %>
 <ul>
   <% @user.received_secrets.each do |secret| %>
-    <li><%= secret.title %></li>
+    <% tags = secret.tags.map { |t| t.name }.join(", ").insert(0, " Tags: ") %>
+    <li><%= secret.title %><%= tags if tags.length > 7 %></li>
+
   <% end %>
 </ul>
